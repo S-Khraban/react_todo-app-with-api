@@ -1,26 +1,14 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import cn from 'classnames';
 import { UserWarning } from './UserWarning';
-import {
-  USER_ID,
-  getTodos,
-  createTodo,
-  deleteTodo,
-  updateTodo,
-} from './api/todos';
+import { getTodos, createTodo, deleteTodo, updateTodo } from './api/todos';
 import type { Todo } from './types/Todo';
 import { Filter, FilterStatus } from './components/Filter';
 import { Notification } from './components/Notification';
 import { TodoList } from './components/TodoList';
 import { getFilteredTodos } from './utils/getFilteredTodos';
-
-const ERROR_MESSAGES = {
-  EMPTY_TITLE: 'Title should not be empty',
-  ADD_FAIL: 'Unable to add a todo',
-  DELETE_FAIL: 'Unable to delete a todo',
-  LOAD_FAIL: 'Unable to load todos',
-  UPDATE_FAIL: 'Unable to update a todo',
-} as const;
+import { USER_ID } from './constants/user';
+import { ErrorMessage } from './constants/errorMessages';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -67,7 +55,7 @@ export const App: React.FC = () => {
 
         setTodos(data);
       } catch {
-        showError(ERROR_MESSAGES.LOAD_FAIL);
+        showError(ErrorMessage.LoadFail);
       }
     })();
 
@@ -95,7 +83,7 @@ export const App: React.FC = () => {
     const trimmed = title.trim();
 
     if (!trimmed) {
-      showError(ERROR_MESSAGES.EMPTY_TITLE);
+      showError(ErrorMessage.EmptyTitle);
 
       return;
     }
@@ -108,7 +96,7 @@ export const App: React.FC = () => {
       setTodos(curr => [...curr, created]);
       setTitle('');
     } catch {
-      showError(ERROR_MESSAGES.ADD_FAIL);
+      showError(ErrorMessage.AddFail);
     } finally {
       setTempTodo(null);
       setIsAdding(false);
@@ -127,7 +115,7 @@ export const App: React.FC = () => {
       await deleteTodo(id);
       setTodos(curr => curr.filter(t => t.id !== id));
     } catch {
-      showError(ERROR_MESSAGES.DELETE_FAIL);
+      showError(ErrorMessage.DeleteFail);
     } finally {
       popPending(id);
       setTimeout(() => newTodoInputRef.current?.focus(), 0);
@@ -145,7 +133,7 @@ export const App: React.FC = () => {
         ),
       );
     } catch {
-      showError(ERROR_MESSAGES.UPDATE_FAIL);
+      showError(ErrorMessage.UpdateFail);
     } finally {
       popPending(id);
     }
@@ -174,8 +162,7 @@ export const App: React.FC = () => {
         curr.map(t => (t.id === id ? { ...t, title: updated.title } : t)),
       );
     } catch {
-      showError(ERROR_MESSAGES.UPDATE_FAIL);
-      throw new Error('UPDATE_FAIL');
+      showError(ErrorMessage.UpdateFail);
     } finally {
       popPending(id);
     }
@@ -215,7 +202,7 @@ export const App: React.FC = () => {
     });
 
     if (failedIds.length) {
-      showError(ERROR_MESSAGES.UPDATE_FAIL);
+      showError(ErrorMessage.UpdateFail);
     }
 
     if (succeedIds.length) {
@@ -256,7 +243,7 @@ export const App: React.FC = () => {
     });
 
     if (failedIds.length) {
-      showError(ERROR_MESSAGES.DELETE_FAIL);
+      showError(ErrorMessage.DeleteFail);
     }
 
     setTodos(curr => curr.filter(t => !successIds.includes(t.id)));

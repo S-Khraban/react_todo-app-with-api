@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = 'https://mate.academy/students-api';
 
 function wait(delay: number) {
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     setTimeout(resolve, delay);
   });
 }
 
 type RequestMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
-function request<T>(
+function request<T, B = unknown>(
   url: string,
   method: RequestMethod = 'GET',
-  data: any = null,
+  data?: B,
 ): Promise<T> {
   const options: RequestInit = { method };
 
@@ -30,13 +29,13 @@ function request<T>(
         throw new Error();
       }
 
-      return response.json();
+      return response.json() as Promise<T>;
     });
 }
 
 export const client = {
   get: <T>(url: string) => request<T>(url),
-  post: <T>(url: string, data: any) => request<T>(url, 'POST', data),
-  patch: <T>(url: string, data: any) => request<T>(url, 'PATCH', data),
-  delete: (url: string) => request(url, 'DELETE'),
+  post: <T, B>(url: string, data: B) => request<T, B>(url, 'POST', data),
+  patch: <T, B>(url: string, data: B) => request<T, B>(url, 'PATCH', data),
+  delete: (url: string) => request<unknown>(url, 'DELETE'),
 };

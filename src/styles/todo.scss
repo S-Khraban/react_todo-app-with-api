@@ -13,13 +13,13 @@
 
   &__status-label {
     cursor: pointer;
-    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='-10 -18 100 135'%3E%3Ccircle cx='50' cy='50' r='50' fill='none' stroke='%23ededed' stroke-width='3'/%3E%3C/svg%3E");
+    background-image: url('/icons/unchecked.svg');
     background-repeat: no-repeat;
     background-position: center left;
   }
 
   &.completed &__status-label {
-    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='-10 -18 100 135'%3E%3Ccircle cx='50' cy='50' r='50' fill='none' stroke='%23bddad5' stroke-width='3'/%3E%3Cpath fill='%235dc2af' d='M72 25L42 71 27 56l-4 4 20 20 34-52z'/%3E%3C/svg%3E");
+    background-image: url('/icons/checked.svg');
   }
 
   &__status {
@@ -55,7 +55,6 @@
     opacity: 0;
     transition: color 0.2s ease-out, opacity 0.2s ease-out;
     z-index: 2;
-    pointer-events: auto;
 
     &:hover {
       color: #af5b5e;

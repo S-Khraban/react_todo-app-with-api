@@ -11,12 +11,6 @@ type Props = {
   onChange: (nextStatus: FilterStatus) => void;
 };
 
-const FILTERS: FilterStatus[] = [
-  FilterStatus.All,
-  FilterStatus.Active,
-  FilterStatus.Completed,
-];
-
 const getHref = (status: FilterStatus) =>
   status === FilterStatus.All ? '#/' : `#/${status}`;
 
@@ -34,7 +28,8 @@ export const Filter: React.FC<Props> = ({ value, onChange }) => {
 
   return (
     <nav className="filter" data-cy="Filter">
-      {FILTERS.map(status => (
+      +{' '}
+      {Object.values(FilterStatus).map(status => (
         <a
           key={status}
           href={getHref(status)}
