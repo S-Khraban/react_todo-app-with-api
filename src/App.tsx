@@ -52,7 +52,6 @@ export const App: React.FC = () => {
     (async () => {
       try {
         const data = await getTodos();
-
         setTodos(data);
       } catch {
         showError(ErrorMessage.LoadFail);
@@ -84,7 +83,6 @@ export const App: React.FC = () => {
 
     if (!trimmed) {
       showError(ErrorMessage.EmptyTitle);
-
       return;
     }
 
@@ -92,7 +90,6 @@ export const App: React.FC = () => {
       setIsAdding(true);
       setTempTodo({ id: 0, title: trimmed, completed: false, userId: USER_ID });
       const created = await createTodo(trimmed);
-
       setTodos(curr => [...curr, created]);
       setTitle('');
     } catch {
@@ -126,7 +123,6 @@ export const App: React.FC = () => {
     pushPending(id);
     try {
       const updated = await updateTodo(id, { completed: nextCompleted });
-
       setTodos(curr =>
         curr.map(t =>
           t.id === id ? { ...t, completed: updated.completed } : t,
@@ -144,7 +140,6 @@ export const App: React.FC = () => {
 
     if (trimmed.length === 0) {
       await handleDelete(id);
-
       return;
     }
 
@@ -157,12 +152,12 @@ export const App: React.FC = () => {
     pushPending(id);
     try {
       const updated = await updateTodo(id, { title: trimmed });
-
       setTodos(curr =>
         curr.map(t => (t.id === id ? { ...t, title: updated.title } : t)),
       );
     } catch {
       showError(ErrorMessage.UpdateFail);
+      throw new Error(ErrorMessage.UpdateFail);
     } finally {
       popPending(id);
     }
